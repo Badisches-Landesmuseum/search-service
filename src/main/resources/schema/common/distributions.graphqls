@@ -1,0 +1,13 @@
+
+type EpochGroup {
+    "Epoch name"
+    name: String!
+    "Amount of museum objects in this epoch."
+    count: Int!
+    "Percentage ratio of museum objects in this epoch"
+    ratio: Int!
+    "start year of an epoch"
+    start: Int!
+    "end year of an epoch"
+    end: Int!
+}

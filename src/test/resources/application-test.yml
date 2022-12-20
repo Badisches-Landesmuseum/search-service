@@ -1,0 +1,25 @@
+spring:
+  autoconfigure:
+    exclude: >
+      org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration;
+      org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+      org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration;
+
+  main:
+    allow-bean-definition-overriding: true
+
+  elasticsearch:
+    port: ${ELASTICSEARCH_PORT:9200}
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
+    rabbit:
+      enabled: false
+
+
+dgs:
+  graphql:
+    schema-locations:
+      - classpath*:schema/**/*.graphql*

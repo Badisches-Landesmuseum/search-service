@@ -1,0 +1,158 @@
+interface Asset implements Node @key(fields: "id") @extends {
+    id: ID! @external
+}
+
+type Image implements Asset & Node @key(fields : "id") @extends  {
+    id: ID! @external
+}
+
+type Audio implements Asset & Node @key(fields : "id") @extends  {
+    id: ID! @external
+}
+type Document implements Asset   & Node @key(fields : "id") @extends  {
+    id: ID! @external
+}
+
+type Video implements Asset   & Node  @key(fields : "id")  @extends {
+    id: ID! @external
+}
+
+type Hypertext implements Asset  & Node @key(fields : "id") @extends  {
+    id: ID! @external
+}
+
+type Page  implements  Node @key(fields : "id") @extends {
+    id: ID! @external
+}
+
+
+type Highlight {
+    fieldName: String!
+    content: [String]!
+}
+
+
+type PanquraArticleSearchResult  {
+    id: ID!
+    hypertext: Hypertext!
+    highlights: [Highlight]!
+}
+"""--------------------------------------------------------------------"""
+
+type Query {
+    searchAssets(where: AssetSearchWhereInput!, orderBy:[AssetSearchOrderByInput],  first: Int = 10,  skip: Int = 0): AssetSearchResultConnection!
+    searchPages(where: PageSearchWhereInput!,orderBy:[PageSearchOrderByInput], first: Int = 10,  skip: Int = 0): PageSearchResultConnection!
+    searchSimilarPages(where:PageUniqueInput!, orderBy:[PageSearchOrderByInput], first: Int = 10,  skip: Int = 0): PageSearchResultConnection!
+    similarTags(where: PageUniqueInput!, first: Int = 10,  skip: Int = 0): [String]
+    panquraArticles(where: PanquraArticleSearchWhereInput!, orderBy:[PanquraArticleOrderByInput],  first: Int = 10,  skip: Int = 0): PanquraArticleSearchResultConnection!
+
+}
+
+input AssetSearchWhereInput {
+    content: TextSearchFilter
+    project: ProjectWhereUniqueInput
+    _typeName: AssetTypeFilter
+}
+
+input PanquraArticleOrderByInput {
+    updatedAt: SortDirection
+    createdAt: SortDirection
+}
+
+
+
+input PanquraArticleSearchWhereInput {
+    content: TextSearchFilter
+    project: ProjectWhereUniqueInput
+}
+
+
+
+input ProjectWhereUniqueInput{
+    id: IDFilter
+}
+
+input AssetSearchOrderByInput {
+    updatedAt: SortDirection
+    createdAt: SortDirection
+    fileName: SortDirection
+}
+
+
+
+
+input PageSearchOrderByInput {
+    updatedAt: SortDirection
+    createdAt: SortDirection
+}
+
+input PageUniqueInput {
+    id: ID!
+}
+
+input PageSearchWhereInput {
+    content: String!
+    project: ProjectWhereUniqueInput
+}
+
+type AssetSearchResultConnection {
+    edges: [AssetSearchResultEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+
+
+type PanquraArticleSearchResultConnection {
+    edges: [PanquraArticleSearchResultEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+
+
+type PageSearchResultConnection {
+    edges: [PageSearchResultEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+type PanquraArticleSearchResultEdge {
+    node: PanquraArticleSearchResult!
+    cursor: String!
+}
+
+
+type PageSearchResultEdge {
+    node: Page!
+    cursor: String!
+}
+
+
+type AssetSearchResultEdge {
+    node: Asset!
+    cursor: String!
+}
+
+enum AssetType {
+    AUDIO
+    DOCUMENT
+    IMAGE
+    VIDEO
+    HYPERTEXT
+}
+
+
+input AssetTypeFilter {
+    equals: AssetType
+    in: [AssetType!]
+    notIn: [AssetType!]
+    not: AssetNestedTypeFilter
+}
+
+input AssetNestedTypeFilter {
+    equals: AssetType
+    in: [AssetType!]
+    notIn: [AssetType!]
+    not: AssetNestedTypeFilter
+}

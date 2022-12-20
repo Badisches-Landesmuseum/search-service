@@ -1,0 +1,19 @@
+"An object with an ID"
+interface Node {
+    "The ID of an object"
+    id: ID!
+}
+
+interface SearchResult {
+    id: ID!
+    highlights: [Highlight]!
+}
+
+
+
+
+
+
+
+
+

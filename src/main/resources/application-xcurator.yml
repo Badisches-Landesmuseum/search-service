@@ -1,0 +1,4 @@
+dgs:
+  graphql:
+    schema-locations:
+      - classpath*:schema/**/*.graphql*

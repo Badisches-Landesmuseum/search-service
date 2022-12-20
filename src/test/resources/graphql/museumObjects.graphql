@@ -1,0 +1,9 @@
+{
+    museumObjects(first: 10) {
+        edges {
+            node {
+                id
+            }
+        }
+    }
+}

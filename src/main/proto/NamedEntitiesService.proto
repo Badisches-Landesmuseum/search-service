@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package dreipc.asset.document.namedentities;
+
+option java_package = "dreipc.q8r.proto.asset.document";
+option java_outer_classname = "NamedEntitiesProtos";
+import "google/protobuf/timestamp.proto";
+
+
+message NamedEntitiesDetectionAction {
+  string id = 1;
+  string content = 2;
+  ModelTypeProto model = 3;
+}
+
+
+message NamedEntityDeletedEvent {
+  string id = 1;
+}
+
+
+message NamedEntitiesResultEventProto {
+  string sourceId = 1;
+  repeated NamedEntityProto entities = 2;
+  StatusProto status = 3;
+  ModelTypeProto model = 4;
+  repeated string tags = 5;
+}
+
+
+message NamedEntitiesSavedEventProto {
+  string id = 1;
+  repeated NamedEntityProto entities = 2;
+  repeated string tags = 3;
+}
+
+
+
+// new in ned : TODO: REMOVE old when pipline is tested.
+
+message NamedEntitiesDocumentImportedEvent {
+  string syncId = 1;
+  NamedEntitiesDetectionActionProto detectionResult = 2;
+}
+
+enum StatusProto {
+  NOT_STARTED = 0;
+  PENDING = 1;
+  DONE = 2;
+  VERIFIED = 3;
+  ERROR = 4;
+}
+
+enum ModelTypeProto {
+  GENERAL = 0;
+}
+
+
+// TODO: remove as well
+message NamedEntitiesDetectionActionProto {
+  string providedBy = 1;
+  repeated NamedEntityProto entities = 2;
+  StatusProto status = 3;
+  string documentId = 4;
+  string projectId = 5;
+  string pageId = 6;
+  repeated PageTagsProto pageTags = 8;
+  google.protobuf.Timestamp createdAt = 9;
+  google.protobuf.Timestamp updatedAt = 10;
+
+}
+
+message PageTagsProto {
+  string id = 1;
+  string documentId = 2;
+  string projectId = 3;
+  string pageId = 4;
+  string type = 5;
+  repeated string tags = 6;
+}
+
+message NamedEntityProto {
+  string id = 1;
+  string literal = 2;
+  string type = 3;
+  string pageId = 4; // TODO: remove, source id is enough
+  int32  startPosition = 5;
+  int32  endPosition = 6;
+  string knowledgeBaseId = 7;
+  string knowledgeBaseUrl = 8;
+  string documentId = 9;  // TODO: remove, source id is enough
+  string projectId = 10;
+  string sourceId = 11;
+
+}

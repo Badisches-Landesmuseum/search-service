@@ -1,0 +1,81 @@
+plugins {
+    id 'org.springframework.boot' version "2.7.5"
+    id "io.spring.dependency-management" version "1.1.0"
+    id "io.freefair.lombok" version "6.5.1"
+    id "com.google.protobuf" version "0.9.1"
+    id "com.netflix.dgs.codegen" version "5.6.2"
+    id 'java'
+    id 'idea'
+}
+
+group = 'dreipc.q8r.asset'
+sourceCompatibility = 17
+
+apply from: "$rootDir/gradle/testing.gradle"
+apply from: "$rootDir/gradle/docker.gradle"
+apply from: "$rootDir/gradle/versioning.gradle"
+apply from: "$rootDir/gradle/spring-properties.gradle"
+
+
+// Fix for 5.4.0 due to dependency resolution: https://github.com/Netflix/dgs-framework/issues/1281
+ext['graphql-java.version'] = '19.2'
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.21.5'
+    }
+}
+
+generateJava {
+    // packageName and subPackageNameTypes are set to generate correct union | interfaces
+    packageName = "de.dreipc.q8r.asset.page.similarities"
+    generateClient = false
+
+    typeMapping = [
+            "RGB"       : "java.lang.String",
+
+    ]
+
+}
+
+repositories {
+    maven {
+        name "3pc Maven Repository"
+        url "https://nexus.3pc.de/repository/maven-group/"
+    }
+}
+
+configurations.all {
+
+
+    // Check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+
+    // version 0.10.2 is buggy which reflects in migration is not working!
+    implementation('org.reflections:reflections') {
+        version {
+            strictly '0.10.1'
+        }
+    }
+
+
+    annotationProcessor 'org.springframework:spring-context-indexer'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+    // Infrastructure
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    implementation 'de.dreipc:graphql:5.4.1-dev.240'
+    implementation 'de.dreipc:rabbitmq-proto:0.1.2-dirty-SNAPSHOT'
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.testcontainers:elasticsearch:1.17.4'
+
+}

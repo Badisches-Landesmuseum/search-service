@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package dreipc.q8r.proto.asset;
+option java_package = "dreipc.q8r.proto.document";
+option java_outer_classname = "PageSimilaritiesProtos";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+
+message PageSimilaritiesIndexImportedEvent {
+  string projectId = 1;
+  string syncId = 2;
+  google.protobuf.Timestamp creationTime = 3;
+  string assetId = 4;
+  StatusProto status = 5;
+  string sourceId = 6;
+}
+
+
+message PageSimilaritiesIndexDeletedEvent {
+  string projectId = 1;
+  string sourceId = 2;
+}
+
+enum StatusProto {
+  NOT_STARTED = 0;
+  PENDING = 1;
+  DONE = 2;
+  VERIFIED = 3;
+  ERROR = 4;
+}

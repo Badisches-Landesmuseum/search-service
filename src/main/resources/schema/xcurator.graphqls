@@ -1,0 +1,116 @@
+type MuseumObject implements Node @key(fields: "id") @extends {
+    id: ID! @external
+}
+
+type ExceptionalMuseumObject {
+    museumObject: MuseumObject!
+    reason: [ExceptionalReason!]!
+}
+
+enum ExceptionalReason {
+    MATERIAL
+}
+
+extend type Query {
+    museumObjects(where: MuseumObjectSearchWhereInput,orderBy:[MuseumObjectSearchOrderByInput], first: Int = 10,  skip: Int = 0): MuseumObjectResultConnection!
+    museumObjectsByColor(where: MuseumObjectColorSearchWhereInput! first: Int = 10,  skip: Int = 0): MuseumObjectColorResultConnection!
+    exceptionalMuseumObjects(where: MuseumObjectSearchWhereInput,orderBy:[MuseumObjectSearchOrderByInput], first: Int = 10,  skip: Int = 0): ExceptionalMuseumObjectResultConnection!
+    smartKeywords(first:Int = 10, skip: Int=0): [String!]!
+    "Get a Material Distribution Statistic."
+    materialDistribution: [MaterialGroup!]!
+    "Get a Country Distribution Statistic."
+    countryDistribution: [CountryGroup!]!
+    "Get an Epoch Distribution Statistic."
+    epochDistribution: [EpochGroup!]!
+    "Search for similar images by a given Image file, url or a max 77 Token long text"
+    similarMuseumObjects(where: ImageMuseumObjectSearchWhereInput!, first:Int = 10, skip:Int = 0): MuseumObjectResultConnection!
+}
+
+type CountryGroup{
+    "Country name"
+    name: String!
+    "Amount of museum objects in this country."
+    count: Int!
+    "Percentage ratio of museum objects in this country"
+    ratio: Int!
+}
+
+
+type MaterialGroup {
+    "Material name"
+    name: String!
+    "Amount of museum objects of this material."
+    count: Int!
+    "Percentage ratio of museum objects in the whole (out of 100%)"
+    ratio: Int!
+}
+
+input ImageMuseumObjectSearchWhereInput {
+    projectId: ID!
+    imageId: ID!
+}
+
+input MuseumObjectColorSearchWhereInput {
+    color: RGB!
+}
+
+input MuseumObjectSearchWhereInput {
+    keywords: [String!]
+    materials: [String!]
+    countries: [String!]
+    epochs:[String!]
+}
+
+
+input MuseumObjectSearchOrderByInput {
+    updatedAt: SortDirection
+    createdAt: SortDirection
+}
+
+
+type MuseumObjectSearchResultEdge {
+    node: MuseumObject!
+    cursor: String!
+}
+
+type ExceptionalMuseumObjectSearchResultEdge {
+    node: ExceptionalMuseumObject!
+    cursor: String!
+}
+
+type ExceptionalMuseumObjectResultConnection {
+    edges: [ExceptionalMuseumObjectSearchResultEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+    keywords: [String!]!
+}
+
+type MuseumObjectResultConnection {
+    edges: [MuseumObjectSearchResultEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+    keywords: [String!]!
+}
+
+
+type MuseumObjectSearchResult implements SearchResult {
+    id: ID!
+    museumObject: MuseumObject!
+    highlights: [Highlight]!
+}
+
+type MuseumObjectColorSearchResult {
+    museumObject: MuseumObject!
+    image: Image!
+}
+
+type MuseumObjectColorSearchResultEdge {
+    node: MuseumObjectColorSearchResult!
+    cursor: String!
+}
+
+type MuseumObjectColorResultConnection {
+    edges: [MuseumObjectColorSearchResultEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
+}

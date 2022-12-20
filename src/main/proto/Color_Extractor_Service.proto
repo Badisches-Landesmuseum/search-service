@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package dreipc.q8r.proto.asset;
+option java_package = "dreipc.proto";
+option java_outer_classname = "ColorExtractorProtos";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+message ImageColorIndexAction{
+  string imageId = 1;
+  string projectId = 2;
+  string artefactId = 4;
+  ColorExtractionEventProto colorInfo = 5;
+}
+message ColorInformationProto {
+  string hexRGB = 1;
+  int32 pixel_count = 2;
+  float ratio = 3;
+  string name = 4;
+}
+
+message ColorExtractionEventProto {
+  repeated ColorInformationProto colorPalette= 1;
+  repeated ColorInformationProto background = 2;
+  repeated ColorInformationProto shiny = 3;
+}
+
+message ColorExtractionAction {
+    string filePath = 1;
+    string fileUrl = 2;
+}
